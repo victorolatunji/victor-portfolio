@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-black: #000000;
+  --color-grey: #c9cac8;   /* page background */
+  --color-stone: #b6b7b4;  /* darker grey panels */
+  --color-muted: #454545;  /* secondary text on grey */
+  --color-bone: #f1f1ef;   /* text on black */
+  --color-red: #d4201a;
+  --color-green: #17803d;
+  --color-lime: #3ecf6e;   /* green on black backgrounds */
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-grey);
+  color: var(--color-black);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.display {
+  font-family: var(--font-syne), var(--font-sans);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-red);
+  outline-offset: 3px;
+}
+
+/* ---------- Player card ---------- */
+.card-3d {
+  perspective: 1400px;
+}
+
+.card-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+.photo {
+  filter: grayscale(1) contrast(1.2) brightness(0.92);
+}
+
+.card-shade {
+  background: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.35) 38%, transparent 62%);
+}
+
+/* ---------- Typing line ---------- */
+.caret {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.85em;
+  margin-left: 0.1em;
+  background: var(--color-red);
+  vertical-align: -0.1em;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- Pitch ---------- */
+.pitch {
+  background: repeating-linear-gradient(to bottom, #000 0, #000 10%, #121212 10%, #121212 20%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .card-inner {
+    transition: none;
+  }
+  .caret {
+    animation: none;
+  }
 }
