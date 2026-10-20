@@ -9,7 +9,7 @@
   --color-red: #d4201a;
   --color-green: #17803d;
   --color-lime: #3ecf6e;   /* green on black backgrounds */
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -25,10 +25,10 @@ body {
 }
 
 .display {
-  font-family: var(--font-syne), var(--font-sans);
+  font-family: var(--font-heading), var(--font-sans);
   font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.02em;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
 }
 
 :focus-visible {

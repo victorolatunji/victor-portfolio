@@ -25,7 +25,7 @@ export default function PlayerCard() {
             <div className="card-shade absolute inset-0" />
             <div className="absolute inset-x-0 bottom-0 p-5 text-bone">
               <p className="display text-3xl">{site.cardName}</p>
-              <p className="mt-1 text-sm text-bone/70">{card.position}</p>
+              <p className="mt-1 text-sm text-bone/70">{site.role}</p>
             </div>
           </div>
 
@@ -39,7 +39,20 @@ export default function PlayerCard() {
               {card.stats.map((s) => (
                 <div key={s.label} className="border-t border-bone/15 pt-2">
                   <dt className="text-xs text-bone/55">{s.label}</dt>
-                  <dd className="text-sm font-semibold">{s.value}</dd>
+                  <dd className="display whitespace-nowrap text-[0.9rem] tracking-normal">
+                    {Array.isArray(s.value) ? (
+                      <span className="flex items-center gap-x-2">
+                        {s.value.map((v, i) => (
+                          <span key={v} className="flex items-center gap-2">
+                            {i > 0 && <span className="h-1 w-1 rounded-full bg-red" aria-hidden />}
+                            {v}
+                          </span>
+                        ))}
+                      </span>
+                    ) : (
+                      s.value
+                    )}
+                  </dd>
                 </div>
               ))}
             </dl>

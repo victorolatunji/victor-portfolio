@@ -1,3 +1,4 @@
+import Experience from "@/components/Experience";
 import Lineup from "@/components/Lineup";
 import PlayerCard from "@/components/PlayerCard";
 import Typer from "@/components/Typer";
@@ -5,6 +6,7 @@ import WorkList from "@/components/WorkList";
 import { site } from "@/data/site";
 
 const container = "mx-auto w-full max-w-6xl px-6";
+const sectionTitle = "display mb-8 text-4xl sm:text-5xl";
 
 export default function Home() {
   return (
@@ -18,17 +20,25 @@ export default function Home() {
             href={site.status.href}
             target="_blank"
             rel="noreferrer"
-            className="hidden items-center gap-2 text-sm text-muted hover:text-black md:flex"
+            className="hidden items-center gap-2 text-sm text-muted hover:text-black lg:flex"
           >
             <span className="h-2 w-2 rounded-full bg-green" aria-hidden />
             {site.status.text}
           </a>
-          <nav className="flex gap-5 text-sm font-semibold">
+          <nav className="hidden gap-5 text-sm font-semibold sm:flex">
             <a href="#work" className="hover:text-red">Work</a>
-            <a href="#lineup" className="hover:text-red">Lineup</a>
-            <a href="#about" className="hover:text-red">About</a>
+            <a href="#experience" className="hover:text-red">Experience</a>
+            <a href="#vao" className="hover:text-red">VAO</a>
             <a href="#contact" className="hover:text-red">Contact</a>
           </nav>
+          <a
+            href={site.links.resume}
+            target="_blank"
+            rel="noreferrer"
+            className="bg-black px-4 py-2 text-sm font-semibold text-bone hover:bg-red"
+          >
+            Résumé
+          </a>
         </div>
       </header>
 
@@ -64,18 +74,50 @@ export default function Home() {
 
         {/* Work */}
         <section id="work" className={`${container} scroll-mt-8 pb-28`}>
-          <h2 className="display mb-8 text-4xl sm:text-5xl">Selected work</h2>
+          <h2 className={sectionTitle}>Selected work</h2>
           <WorkList />
+        </section>
+
+        {/* Experience */}
+        <section id="experience" className={`${container} scroll-mt-8 pb-28`}>
+          <h2 className={sectionTitle}>Experience</h2>
+          <Experience />
         </section>
 
         {/* Lineup */}
         <section id="lineup" className={`${container} scroll-mt-8 pb-28`}>
-          <h2 className="display mb-8 text-4xl sm:text-5xl">Starting XI</h2>
+          <h2 className={sectionTitle}>Starting XI</h2>
           <Lineup />
         </section>
 
+        {/* VAO */}
+        <section id="vao" className="scroll-mt-8 bg-stone py-24">
+          <div className={`${container} grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] md:gap-10`}>
+            <div>
+              <p className="display text-7xl sm:text-8xl">{site.brand}</p>
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {site.vao.offers.map((o) => (
+                  <li key={o} className="bg-black px-3 py-1.5 text-sm font-semibold text-bone">
+                    {o}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="max-w-prose">
+              <h2 className="display text-3xl sm:text-4xl">{site.vao.heading}</h2>
+              <p className="mt-5 text-lg leading-relaxed">{site.vao.text}</p>
+              <a
+                href={`mailto:${site.email}?subject=${encodeURIComponent("Collab with VAO")}`}
+                className="mt-8 inline-block bg-red px-6 py-3 font-semibold text-bone hover:bg-black"
+              >
+                {site.vao.cta}
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* About */}
-        <section id="about" className={`${container} scroll-mt-8 pb-28`}>
+        <section id="about" className={`${container} scroll-mt-8 py-28`}>
           <div className="grid gap-6 border-t border-black pt-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] md:gap-10">
             <h2 className="display text-4xl sm:text-5xl">About</h2>
             <div className="max-w-prose space-y-5 text-lg leading-relaxed">
@@ -94,7 +136,7 @@ export default function Home() {
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-bone/75">{site.contact.text}</p>
             <a
               href={`mailto:${site.email}`}
-              className="display mt-8 inline-block break-all text-3xl text-lime hover:text-red sm:text-5xl"
+              className="display mt-8 inline-block break-all text-2xl text-lime hover:text-red sm:text-4xl"
             >
               {site.email}
             </a>
