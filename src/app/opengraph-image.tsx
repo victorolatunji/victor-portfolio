@@ -16,20 +16,20 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#c9cac8",
+          background: "#e9ebee",
           padding: 72,
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ fontSize: 60, fontWeight: 800, color: "#000" }}>{site.brand}</div>
-          <div style={{ display: "flex", alignItems: "center", fontSize: 28, color: "#454545" }}>
-            <div style={{ width: 16, height: 16, borderRadius: 8, background: "#17803d", marginRight: 14 }} />
+          <div style={{ display: "flex", alignItems: "center", fontSize: 28, color: "#5b6068" }}>
+            <div style={{ width: 16, height: 16, borderRadius: 8, background: "#1f9d55", marginRight: 14 }} />
             {site.role}
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 88, fontWeight: 800, color: "#000", lineHeight: 1 }}>{site.fullName}</div>
-          <div style={{ fontSize: 40, color: "#d4201a", marginTop: 24 }}>{site.headline}</div>
+          <div style={{ fontSize: 30, color: "#b3261e", marginTop: 24, maxWidth: 1000 }}>{site.hero.line}</div>
         </div>
       </div>
     ),

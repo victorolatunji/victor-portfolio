@@ -1,78 +1,94 @@
 // Edit everything about the site's content here.
 // Lines marked TODO need your real info.
+// House rule for copy: no em dashes. Use a colon or a bullet ( · ) instead.
+//
+// PHOTOS: any piece, shoe or accessory can use a real photo instead of the drawing.
+// Drop the file in /public/closet/ and add  image: "/closet/your-file.png"
+// Best results: transparent PNG (background removed), item centred, roughly
+//   rail pieces 800 x 1000 · shoes 900 x 520 · accessories 400 x 400.
+// No image = the built-in drawing is used.
 
-export type WorkItem = {
+export type Kind =
+  | "coat"
+  | "hoodie"
+  | "jacket"
+  | "jeans"
+  | "sweatpants"
+  | "jorts"
+  | "shirt";
+
+export type Piece = {
+  slug: string; // used for "most worn" stats; keep it stable once live
   title: string;
-  role: string;
-  year: string;
+  kind: Kind;
+  color: string; // main fabric colour
+  type: "project" | "brand" | "commission";
+  role?: string;
+  year?: string;
+  status?: string; // e.g. "In production"
   summary: string;
   points?: string[];
-  stack: string[];
-  href?: string;
-  status?: string;
+  stack?: string[];
+  link?: { label: string; href: string };
+  image?: string; // optional photo, e.g. "/closet/coat.png"
 };
 
-export type Job = {
-  role: string;
-  company: string;
-  dates: string;
-  summary: string;
-};
-
-export type Player = {
+export type Shoe = {
   name: string;
-  number: number;
-  line: "GK" | "DEF" | "MID" | "FWD";
+  kind: "workboot" | "hightop" | "runner" | "clog";
+  label: string; // what it opens
+  href: string;
+  image?: string; // optional photo
 };
+
+export type Accessory = {
+  skill: string;
+  item: string; // the accessory it's "worn" as
+  icon: Icon;
+  image?: string; // optional photo
+};
+
+export type Icon =
+  | "chain" | "ring" | "cufflinks" | "tieclip" | "lighter"
+  | "watch" | "bracelet" | "studs" | "pendant"
+  | "glasses" | "carkey" | "pen" | "cardholder" | "scarf" | "pocketsquare"
+  | "trucker" | "headphones"
+  | "keyring" | "belt" | "gloves" | "perfume" | "beanie" | "pocketwatch";
+
+export type Job = { role: string; company: string; dates: string; summary: string };
 
 export const site = {
   brand: "VAO",
-  domain: "vao.works", // TODO: change once you buy the domain
   fullName: "Victor Ayodeji Olatunji",
-  cardName: "Victor Olatunji",
-  role: "Backend-focused developer",
-  greeting: "Meet Him: Victor Olatunji.",
-  headline: "Most people see the interface. I build what holds it up.",
-  taglines: [
-    "Backend development",
-    "Software Development",
-    "Game development",
-    "Full-stack web applications",
-    "Database design",
-    "Clean, maintainable code",
-  ],
-  intro:
-    "A Computer Programming & Analysis student at Durham College and the founder of VAO, Victor designs full-stack applications around clean data, sound backend logic and code that stays dependable long after launch.",
-  status: { text: "Now shipping for M&S Hosting Solutions", href: "https://mshostingsolutions.ca/" },
+  shortName: "Victor Olatunji",
+  role: "Full-stack developer",
+  location: "Greater Toronto Area",
   email: "victorayodejiolatunji@gmail.com",
-  photo: "/victor-2.jpg",
   links: {
     github: "https://github.com/victorolatunji",
     linkedin: "https://www.linkedin.com/in/victor-a-olatunji-900805397",
     instagram: "https://www.instagram.com/pradameself/",
     x: "https://x.com/pradameself",
-    resume: "/resume.pdf", // put your PDF at /public/resume.pdf
+    resume: "/resume.pdf",
   },
 
-  // Back of the player card in the hero
-  card: {
-    stats: [
-      { label: "From", value: "Nigeria, West Africa" },
-      { label: "Based in", value: "Greater Toronto Area" },
-      { label: "Main moves", value: ["PHP", "Java", "Python", "C#"] },
-      { label: "Off the clock", value: ["Soccer", "Games", "Music", "Nature", "Swag"] },
-    ],
-    sideQuest: {
-      label: "Side quest",
-      name: "NOKEMONO",
-      text: "A streetwear brand I run on the side.",
-      href: "https://nokemono.com",
-    },
+  hero: {
+    kicker: "The private collection of",
+    title: "Victor Olatunji",
+    line: "Full-stack developer, front end to back end. A private collection of software: every piece designed, built and delivered in-house.",
+    primary: "View the collection",
+    secondary: "Request a viewing",
   },
 
-  work: [
+  // ---------- The rail ----------
+  // Drag to rearrange is built in; order here is the default order.
+  rail: [
     {
+      slug: "ms-hosting",
       title: "M&S Hosting Solutions",
+      kind: "coat",
+      color: "#111214",
+      type: "project",
       role: "Freelance full-stack developer",
       year: "2026",
       summary:
@@ -82,37 +98,32 @@ export const site = {
         "Integrated Supabase for data and Resend for email, deployed on Vercel.",
       ],
       stack: ["Next.js", "Supabase", "Tailwind", "Resend", "Vercel"],
-      href: "https://mshostingsolutions.ca/",
+      link: { label: "Visit the live site", href: "https://mshostingsolutions.ca/" },
     },
     {
-      title: "Keyboard Warriors",
-      role: "Game developer, capstone project",
-      year: "2025",
-      status: "Private capstone project",
+      slug: "keys-militia",
+      title: "Keys Militia",
+      kind: "hoodie",
+      color: "#b3261e",
+      type: "project",
+      role: "Founder and game developer, VAO",
+      year: "2026",
+      status: "In production",
       summary:
-        "PC typing game that helps middle school students build typing skills by defeating waves of approaching enemies, one word at a time.",
+        "VAO's first original game: a fast, multiplayer-style web shooter where you fight by typing.",
       points: [
-        "Live input matching with on-screen highlights, and waves that scale word difficulty.",
-        "Power bar that clears the battlefield every 6 kills, plus a 3-life animated health system.",
-        "Full UI flow: main menu, HUD, pause menu, wave announcements and game over screen.",
+        "Built on the ideas behind my Keyboard Warriors capstone, rebuilt for the browser.",
+        "Designed to run cheaply in any browser, no install needed.",
       ],
-      stack: ["Godot 4", "C#", "Git"],
+      stack: ["Phaser", "TypeScript"],
+      // link: { label: "Play Keys Militia", href: "" }, TODO: add once there's a playable build
     },
     {
-      title: "JobBoard",
-      role: "Full-stack developer",
-      year: "2025",
-      summary: "Single-page app for posting, browsing, filtering and managing job listings.",
-      points: [
-        "Search by title or company, with filters for job type and salary.",
-        "Custom useItems hook centralizes data logic and localStorage persistence, shared through the Context API.",
-        "Detail, edit and create views with React Router v6, deployed to Netlify.",
-      ],
-      stack: ["React", "React Router v6", "Context API", "Bootstrap 5", "Vite", "Netlify"],
-      // href: "", TODO: live link or GitHub repo
-    },
-    {
-      title: "Lakeridge Community Hospital Database",
+      slug: "lakeridge-db",
+      title: "Lakeridge Hospital Database",
+      kind: "jeans",
+      color: "#3c4a5c",
+      type: "project",
       role: "Database designer",
       year: "2025",
       summary: "Relational database covering patients, bookings, billing, staff and activity tracking.",
@@ -123,16 +134,130 @@ export const site = {
       stack: ["SQL Server", "SSMS", "ERD", "3NF"],
     },
     {
+      slug: "couldit-be-this-swag",
       title: "CouldItBeThisSWAG",
+      kind: "shirt",
+      color: "#f4f5f6",
+      type: "project",
       role: "Founder and developer",
       year: "2026",
-      status: "In progress",
+      status: "In production",
       summary:
-        "Personal shopping and sourcing service. Clients build a wishlist, connect with a shopper/stylist, and get pieces from designers, luxury brands and artists delivered.",
-      stack: ["Web app", "Sourcing platform"],
+        "Personal shopping and sourcing service. Clients build a wishlist, connect with a shopper or stylist, and get pieces from designers, luxury brands and artists delivered.",
+      stack: ["Next.js", "Sourcing platform"],
+      // link: { label: "Visit CouldItBeThisSWAG", href: "" }, TODO: add once live
     },
-  ] as WorkItem[],
+    {
+      slug: "nokemono",
+      title: "NOKEMONO",
+      kind: "sweatpants",
+      color: "#8d939b",
+      type: "brand",
+      role: "Founder",
+      year: "2026",
+      summary:
+        "My streetwear label, rooted in Japanese outsider culture and code. Consider this a taste: Drop 1 is a three-piece polo capsule.",
+      link: { label: "Step into NOKEMONO", href: "https://nokemono.com" },
+    },
+    {
+      slug: "your-commission",
+      title: "Your piece",
+      kind: "jorts",
+      color: "#d9dce0",
+      type: "commission",
+      summary:
+        "This hanger is reserved. Bring an idea for an app, a website or a game, and it could be the next piece in the collection.",
+      link: { label: "Commission a piece", href: "#contact" },
+    },
+  ] as Piece[],
 
+  // ---------- Shoe shelf (quick links) ----------
+  shoes: [
+    { name: "Work boot", kind: "workboot", label: "GitHub", href: "https://github.com/victorolatunji" },
+    { name: "Chunky high-top", kind: "hightop", label: "LinkedIn", href: "https://www.linkedin.com/in/victor-a-olatunji-900805397" },
+    { name: "Olive runner", kind: "runner", label: "Résumé", href: "/resume.pdf" },
+    { name: "Suede clog", kind: "clog", label: "Instagram", href: "https://www.instagram.com/pradameself/" },
+  ] as Shoe[],
+
+  // ---------- The carry-on (skills as accessories, none repeated) ----------
+  carryOn: [
+    {
+      label: "Backend",
+      items: [
+        { skill: "Java", item: "Cuban link chain", icon: "chain" },
+        { skill: "Python", item: "Signet ring", icon: "ring" },
+        { skill: "C#", item: "Cufflinks", icon: "cufflinks" },
+        { skill: "PHP", item: "Tie clip", icon: "tieclip" },
+        { skill: "Node.js", item: "Lighter", icon: "lighter" },
+      ],
+    },
+    {
+      label: "Data",
+      items: [
+        { skill: "SQL Server", item: "Gold watch", icon: "watch" },
+        { skill: "MySQL", item: "Tennis bracelet", icon: "bracelet" },
+        { skill: "Supabase", item: "Diamond studs", icon: "studs" },
+        { skill: "ERD & 3NF", item: "Iced Jesus piece", icon: "pendant" },
+      ],
+    },
+    {
+      label: "Frontend",
+      items: [
+        { skill: "React", item: "Rimless glasses", icon: "glasses" },
+        { skill: "Next.js", item: "Car key", icon: "carkey" },
+        { skill: "TypeScript", item: "Fountain pen", icon: "pen" },
+        { skill: "JavaScript", item: "Card holder", icon: "cardholder" },
+        { skill: "HTML & CSS", item: "Silk scarf", icon: "scarf" },
+        { skill: "Tailwind", item: "Pocket square", icon: "pocketsquare" },
+      ],
+    },
+    {
+      label: "Games",
+      items: [
+        { skill: "Godot", item: "Trucker cap", icon: "trucker" },
+        { skill: "Phaser", item: "Headphones", icon: "headphones" },
+      ],
+    },
+    {
+      label: "Tools & cloud",
+      items: [
+        { skill: "Git", item: "Key ring", icon: "keyring" },
+        { skill: "Linux", item: "Leather belt", icon: "belt" },
+        { skill: "AWS", item: "Leather gloves", icon: "gloves" },
+        { skill: "Vercel", item: "Fragrance", icon: "perfume" },
+        { skill: "Selenium", item: "Beanie", icon: "beanie" },
+        { skill: "COBOL", item: "Pocket watch", icon: "pocketwatch" },
+      ],
+    },
+  ] as { label: string; items: Accessory[] }[],
+
+  // ---------- The mirror ----------
+  about: [
+    "I build across the whole stack: interfaces people enjoy using, and the backend logic, data and infrastructure that keep them standing. PHP, Java, Python and C# on the server, React and Next.js on the front, and more recently mainframe COBOL and AWS cloud architecture.",
+    "Off the clock you'll find me on the soccer pitch, deep in a playlist, outdoors, or working on NOKEMONO, my streetwear label.",
+  ],
+  motto: "The underdog story is the realest story there is.",
+
+  // What visitors see when they wipe the mirror: what's happening right now.
+  now: {
+    heading: "Right now",
+    items: [
+      "Building Keys Militia, VAO's first game",
+      "Counting down to graduation",
+      "Prepping NOKEMONO's first drop",
+      "Assembling the CouldItBeThisSWAG team",
+      "Hiring through VAO: contract roles open",
+    ],
+    signoff: "Looking good. Let's build something.",
+  },
+  facts: [
+    { label: "From", value: "Nigeria" },
+    { label: "Based in", value: "Greater Toronto Area" },
+    { label: "Studying", value: "Computer Programming & Analysis, Durham College" },
+    { label: "GPA", value: "4.79 / 5" },
+  ],
+
+  // ---------- Care labels ----------
   experience: [
     {
       role: "AI Data Annotator (Remote)",
@@ -150,7 +275,8 @@ export const site = {
       role: "Freelance Full-Stack Developer",
       company: "Self-employed",
       dates: "", // TODO: add start date, e.g. "Jan 2026 → Present"
-      summary: "Design, build and deploy full-stack client websites end to end, from mockup to launch. Clients include M&S Hosting Solutions.",
+      summary:
+        "Design, build and deploy full-stack client websites end to end, from mockup to launch. Clients include M&S Hosting Solutions.",
     },
     {
       role: "Tech Support and Maintenance",
@@ -167,36 +293,20 @@ export const site = {
     detail: "GPA 4.79 / 5",
   },
 
-  vao: {
-    heading: "Technology built to last, and built to grow.",
-    text: "VAO is a technology company building apps, websites and games. We're growing our network of developers, designers and artists, with roles offered on base pay or commission. If you have an idea worth building, we'd like to hear it.",
-    offers: ["App development", "Web development", "Game development"],
-    cta: "Partner with VAO",
+  guestList: {
+    heading: "Sign the guest list.",
+    text: "Passing through? Leave a note. It goes straight onto the rack for the next visitor to read.",
   },
 
-  // Starting XI in a 4-3-3. Order within each line = left to right on the pitch.
-  lineup: [
-    { name: "HTML & CSS", number: 7, line: "FWD" },
-    { name: "React", number: 9, line: "FWD" },
-    { name: "Next.js", number: 11, line: "FWD" },
-    { name: "Python", number: 8, line: "MID" },
-    { name: "JavaScript", number: 6, line: "MID" },
-    { name: "TypeScript", number: 10, line: "MID" },
-    { name: "PHP", number: 3, line: "DEF" },
-    { name: "SQL Server", number: 4, line: "DEF" },
-    { name: "Java", number: 5, line: "DEF" },
-    { name: "C#", number: 2, line: "DEF" },
-    { name: "Linux", number: 1, line: "GK" },
-  ] as Player[],
-  bench: ["MySQL", "Godot", "COBOL", "JCL", "AWS", "Selenium", "Tailwind", "Supabase", "Git"],
-
-  about: [
-        "I learn by building. Most of my work lives on the backend: PHP, Java, Python and C#, relational databases, and more recently mainframe COBOL and AWS cloud architecture.",
-    "Off the clock, you'll find me on the soccer pitch, deep in a playlist or outdoors. The same things that make a good teammate shape how I work: consistency, clear communication and following through until the job is done right.",],
-  motto: "The underdog story is the realest story there is.",
-
   contact: {
-    heading: "Let's build something that holds up.",
-    text: "I bring backend depth, kitchen-tested discipline and follow-through to every team I join. If that's what your team needs, let's talk.",
+    heading: "Request a private viewing.",
+    text: "Have a piece in mind, or want a seat at the table? Commission an app, a website or a game, or join the VAO team and help build the next collection.",
+    options: ["Commission a piece", "Join the VAO team", "Just say hello"],
+  },
+
+  footerLabel: {
+    text: "From the same atelier",
+    name: "NOKEMONO",
+    href: "https://nokemono.com",
   },
 };

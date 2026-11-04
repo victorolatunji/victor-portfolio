@@ -13,13 +13,13 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#000",
-          color: "#f1f1ef",
+          background: "#0e0f11",
+          color: "#f5f6f7",
           fontSize: 44,
           fontWeight: 800,
         }}
       >
-        V<span style={{ color: "#d4201a" }}>.</span>
+        V<span style={{ color: "#c9a24a" }}>.</span>
       </div>
     ),
     size,

@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { Inter, Schibsted_Grotesk } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import { site } from "@/data/site";
 
-// Headings: Schibsted Grotesk. Body: Inter.
-const heading = Schibsted_Grotesk({ subsets: ["latin"], variable: "--font-heading" });
+// Headings: Instrument Serif (fashion editorial). Body: Inter.
+const heading = Instrument_Serif({ subsets: ["latin"], weight: "400", variable: "--font-heading" });
 const body = Inter({ subsets: ["latin"], variable: "--font-body" });
 
 // Vercel sets this automatically; locally it falls back to localhost.
@@ -13,20 +13,17 @@ const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   : "http://localhost:3000";
 
 const title = `${site.fullName} | ${site.role}`;
+const description = `${site.hero.kicker} ${site.hero.title}. ${site.hero.line}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title,
-  description: site.intro,
-  openGraph: {
-    title,
-    description: site.intro,
-    url: "/",
-    siteName: site.brand,
-    type: "website",
-  },
-  twitter: { card: "summary_large_image", title, description: site.intro },
+  description,
+  openGraph: { title, description, url: "/", siteName: site.shortName, type: "website" },
+  twitter: { card: "summary_large_image", title, description },
 };
+
+export const viewport: Viewport = { themeColor: "#e9ebee" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
