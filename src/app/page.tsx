@@ -2,7 +2,8 @@ import CarryOn from "@/components/CarryOn";
 import Closet from "@/components/Closet";
 import GuestList from "@/components/GuestList";
 import LiveStats from "@/components/LiveStats";
-import Mirror from "@/components/Mirror";
+import Board from "@/components/Board";
+import Files from "@/components/Files";
 import ScrollFx from "@/components/ScrollFx";
 import { site } from "@/data/site";
 
@@ -36,7 +37,7 @@ export default function Home() {
             <nav className="hidden gap-5 text-sm font-medium md:flex">
               <a href="#rail" className="nav-link">Collection</a>
               <a href="#carry-on" className="nav-link">Carry-on</a>
-              <a href="#mirror" className="nav-link">Mirror</a>
+              <a href="#board" className="nav-link">Board</a>
               <a href="#guest-list" className="nav-link">Guest list</a>
               <a href="#contact" className="nav-link">Viewing</a>
             </nav>
@@ -82,53 +83,18 @@ export default function Home() {
           <CarryOn />
         </section>
 
-        {/* Mirror */}
-        <section id="mirror" className="scroll-mt-20 bg-panel py-24">
+        {/* Chalkboard */}
+        <section id="board" className="scroll-mt-20 bg-panel py-24">
           <div data-reveal className={container}>
-            <Head no="03 · THE MIRROR" title="The reflection" />
-            <div className="grid gap-14 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:items-center">
-              <Mirror />
-              <div className="max-w-prose">
-                <p className="display text-4xl sm:text-5xl">{site.fullName}</p>
-                <p className="mono mt-2 text-xs text-accent">{site.role.toUpperCase()} · FRONT END TO BACK END</p>
-                <div className="mt-6 space-y-5 text-lg leading-relaxed">
-                  {site.about.map((p) => (
-                    <p key={p}>{p}</p>
-                  ))}
-                </div>
-                <p className="display mt-7 text-3xl text-accent">&ldquo;{site.motto}&rdquo;</p>
-                <dl className="mt-8 grid gap-x-8 gap-y-3 border-t border-ink/15 pt-6 sm:grid-cols-2">
-                  {site.facts.map((f) => (
-                    <div key={f.label}>
-                      <dt className="mono text-[0.7rem] text-ink/55">{f.label.toUpperCase()}</dt>
-                      <dd className="font-medium">{f.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            </div>
+            <Head no="03 · THE BOARD" title="Chalk talk" note="The short version of me, in chalk. Pick up a stick, leave your mark, and sign before you go." />
+            <Board />
           </div>
         </section>
 
-        {/* Care labels */}
+        {/* Files */}
         <section id="experience" data-reveal className={`${container} scroll-mt-20 py-28`}>
-          <Head no="04 · CARE LABELS" title="Where it's been worn" note="Experience and education." />
-          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {site.experience.map((job) => (
-              <li key={job.role + job.company} className="care">
-                <p className="mono text-[0.7rem] text-ink/55">{job.dates || "ONGOING"}</p>
-                <p className="mt-3 text-lg font-semibold leading-snug">{job.role}</p>
-                <p className="mono mt-1 text-xs text-accent">{job.company.toUpperCase()}</p>
-                <p className="mt-3 text-[0.95rem] leading-relaxed text-ink/75">{job.summary}</p>
-              </li>
-            ))}
-            <li className="care care-dark">
-              <p className="mono text-[0.7rem] text-bone/60">{site.education.dates.toUpperCase()}</p>
-              <p className="mt-3 text-lg font-semibold leading-snug">{site.education.program}</p>
-              <p className="mono mt-1 text-xs text-gold">{site.education.school.toUpperCase()}</p>
-              <p className="display mt-6 text-4xl">{site.education.detail}</p>
-            </li>
-          </ul>
+          <Head no="04 · THE FILES" title="The paper trail" note="Where I've worked and studied. Keep scrolling and each file opens itself." />
+          <Files />
         </section>
 
         {/* Guest list */}

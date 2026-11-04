@@ -238,7 +238,7 @@ export const site = {
   ],
   motto: "The underdog story is the realest story there is.",
 
-  // What visitors see when they wipe the mirror: what's happening right now.
+  // Written on the chalkboard: what's happening right now.
   now: {
     heading: "Right now",
     items: [
@@ -248,7 +248,6 @@ export const site = {
       "Assembling the CouldItBeThisSWAG team",
       "Hiring through VAO: contract roles open",
     ],
-    signoff: "Looking good. Let's build something.",
   },
   facts: [
     { label: "From", value: "Nigeria" },

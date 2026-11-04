@@ -39,3 +39,19 @@ as $$
 $$;
 
 revoke all on function public.bump_piece_view(text) from public, anon, authenticated;
+
+-- ---------- Added later: chalkboard "I was here" signatures ----------
+-- Each signature is a visitor's chalk drawing stored as a small PNG data URL.
+create table if not exists public.board_signatures (
+  id uuid primary key default gen_random_uuid(),
+  image text check (char_length(image) <= 60000),
+  x smallint not null check (x between 0 and 100),
+  y smallint not null check (y between 0 and 100),
+  tilt smallint not null default 0 check (tilt between -15 and 15),
+  hidden boolean not null default false,
+  created_at timestamptz not null default now()
+);
+alter table public.board_signatures enable row level security;
+-- If you created the earlier name-based version of this table, these bring it up to date:
+alter table public.board_signatures add column if not exists image text check (char_length(image) <= 60000);
+alter table public.board_signatures drop column if exists name;

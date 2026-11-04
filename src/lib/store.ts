@@ -109,3 +109,39 @@ export async function getStats(): Promise<Stats> {
   const [top] = (await topRes.json()) as { slug: string; views: number }[];
   return { visitsTotal, visitsToday, notes, mostWorn: top ?? null };
 }
+
+// ---------- Chalkboard signatures ("I was here") ----------
+// Each signature is the visitor's own chalk drawing, stored as a small PNG data URL.
+export type Signature = { id: string; image: string; x: number; y: number; tilt: number; created_at: string };
+
+const memSigs: Signature[] = [];
+
+export async function listSignatures(limit = 30): Promise<Signature[]> {
+  if (mode === "memory") return memSigs.slice(0, limit);
+  const res = await sb(
+    `board_signatures?select=id,image,x,y,tilt,created_at&hidden=eq.false&image=not.is.null&order=created_at.desc&limit=${limit}`,
+  );
+  return res.json();
+}
+
+export async function addSignature(image: string): Promise<Signature> {
+  // Random spot in the "I was here" corner, chosen on the server so everyone sees the same layout.
+  const spot = {
+    image,
+    x: Math.round(2 + Math.random() * 74), // % from left
+    y: Math.round(18 + Math.random() * 52), // % from top
+    tilt: Math.round(-8 + Math.random() * 16), // degrees
+  };
+  if (mode === "memory") {
+    const sig = { ...spot, id: crypto.randomUUID(), created_at: new Date().toISOString() };
+    memSigs.unshift(sig);
+    return sig;
+  }
+  const res = await sb("board_signatures?select=id,image,x,y,tilt,created_at", {
+    method: "POST",
+    prefer: "return=representation",
+    body: JSON.stringify(spot),
+  });
+  const [sig] = await res.json();
+  return sig;
+}
