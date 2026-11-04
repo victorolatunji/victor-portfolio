@@ -116,7 +116,7 @@ export type Signature = { id: string; image: string; x: number; y: number; tilt:
 
 const memSigs: Signature[] = [];
 
-export async function listSignatures(limit = 30): Promise<Signature[]> {
+export async function listSignatures(limit = 120): Promise<Signature[]> {
   if (mode === "memory") return memSigs.slice(0, limit);
   const res = await sb(
     `board_signatures?select=id,image,x,y,tilt,created_at&hidden=eq.false&image=not.is.null&order=created_at.desc&limit=${limit}`,
@@ -125,11 +125,11 @@ export async function listSignatures(limit = 30): Promise<Signature[]> {
 }
 
 export async function addSignature(image: string): Promise<Signature> {
-  // Random spot in the "I was here" corner, chosen on the server so everyone sees the same layout.
+  // x/y/tilt give each signature its own little wobble on the wall (same for every visitor).
   const spot = {
     image,
-    x: Math.round(2 + Math.random() * 74), // % from left
-    y: Math.round(18 + Math.random() * 52), // % from top
+    x: Math.round(2 + Math.random() * 86), // % from left
+    y: Math.round(30 + Math.random() * 60), // % from top (clear of the "Sign here" label)
     tilt: Math.round(-8 + Math.random() * 16), // degrees
   };
   if (mode === "memory") {

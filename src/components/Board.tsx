@@ -14,6 +14,7 @@ export default function Board() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const ghost = useRef<HTMLDivElement>(null);
   const last = useRef<{ x: number; y: number } | null>(null);
+  const idle = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tool, setTool] = useState<Tool>("none");
   const [wiping, setWiping] = useState(false);
   const [sigs, setSigs] = useState<Sig[]>([]);
@@ -105,6 +106,7 @@ export default function Board() {
 
   function down(e: React.PointerEvent) {
     if (tool === "none") return;
+    if (idle.current) clearTimeout(idle.current);
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     last.current = null;
     moveGhost(e);
@@ -117,7 +119,13 @@ export default function Board() {
   }
   function up(e: React.PointerEvent) {
     last.current = null;
-    if (e.pointerType === "touch") hideGhost();
+    if (e.pointerType === "touch") {
+      hideGhost();
+      // On phones the board blocks scrolling while a tool is in hand,
+      // so put it down after a few quiet seconds.
+      if (idle.current) clearTimeout(idle.current);
+      idle.current = setTimeout(() => setTool("none"), 4000);
+    }
   }
 
   function wipe(after?: () => void) {
@@ -163,7 +171,7 @@ export default function Board() {
     maxY = Math.min(height, maxY + pad);
     const w = maxX - minX;
     const h = maxY - minY;
-    const scale = Math.min(1, 300 / w, 150 / h);
+    const scale = Math.min(1, 200 / w, 100 / h); // stored small; shown even smaller
     const out = document.createElement("canvas");
     out.width = Math.max(1, Math.round(w * scale));
     out.height = Math.max(1, Math.round(h * scale));
@@ -175,7 +183,7 @@ export default function Board() {
     const image = capture();
     if (!image) {
       setTool("chalk");
-      setStatus({ kind: "error", text: "Draw your signature with the chalk first, then press the thumbprint." });
+      setStatus({ kind: "error", text: "Sign with the chalk first." });
       return;
     }
     setStatus({ kind: "sending", text: "Placing your signature…" });
@@ -207,19 +215,13 @@ export default function Board() {
     hideGhost();
   }
 
-  const hint =
-    status.text ??
-    (tool === "chalk"
-      ? "Chalk in hand. Draw or sign anywhere on the board, then press the thumbprint."
-      : tool === "eraser"
-        ? "Rub out anything you've drawn."
-        : "Pick up the chalk, sign the board, then press the thumbprint.");
 
   return (
     <div>
       <div
         ref={boardRef}
         className={`board ${tool !== "none" ? "is-drawing" : ""}`}
+        data-signing={tool !== "none" ? "1" : "0"}
         onPointerLeave={hideGhost}
       >
         <div className="board-content">
@@ -262,21 +264,25 @@ export default function Board() {
             </div>
           </div>
 
-          {/* I-was-here corner */}
+          {/* I-was-here wall: signatures line up so none ever overlap */}
           <div className="sig-zone" aria-label="Signatures left by visitors">
             <p className="chalk sig-sign">
               <span className="sig-blink">✎ Sign here</span> <span className="text-bone/55">· I was here</span>
             </p>
-            {sigs.map((s) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={s.id}
-                src={s.image}
-                alt="A visitor's chalk signature"
-                className={`sig ${s.id === fresh ? "is-fresh" : ""}`}
-                style={{ left: `${s.x}%`, top: `${s.y}%`, rotate: `${s.tilt}deg` }}
-              />
-            ))}
+            {sigs.length > 0 && (
+              <div className="sig-wall">
+                {sigs.map((s) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={s.id}
+                    src={s.image}
+                    alt="A visitor's chalk signature"
+                    className={`sig ${s.id === fresh ? "is-fresh" : ""}`}
+                    style={{ rotate: `${s.tilt}deg`, translate: `0 ${(s.y % 7) - 3}px` }}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -336,9 +342,8 @@ export default function Board() {
           </svg>
         </button>
       </div>
-      <p role="status" className={`mt-3 text-sm ${status.kind === "error" ? "text-accent" : status.kind === "ok" ? "text-live-dark" : "text-ink/60"}`}>
-        {hint}
-        {tool !== "none" && <span className="md:hidden"> Tap the tool again to scroll.</span>}
+      <p role="status" className={`mt-3 min-h-5 text-sm ${status.kind === "error" ? "text-accent" : status.kind === "ok" ? "text-live-dark" : "text-ink/60"}`}>
+        {status.text}
       </p>
     </div>
   );

@@ -68,7 +68,7 @@ export default function Home() {
           <Head
             no="01 · THE COLLECTION"
             title="On the rail"
-            note="Projects, a taste of my label, and one hanger saved for you. Open the closet, then rearrange it however you like."
+            note="Sneak a peek."
           />
           <Closet />
         </section>
@@ -78,7 +78,7 @@ export default function Home() {
           <Head
             no="02 · THE CARRY-ON"
             title="Packed and worn"
-            note="My skills, each one an accessory I never travel without. No piece packed twice."
+            note="Never travel light."
           />
           <CarryOn />
         </section>
@@ -86,14 +86,14 @@ export default function Home() {
         {/* Chalkboard */}
         <section id="board" className="scroll-mt-20 bg-panel py-24">
           <div data-reveal className={container}>
-            <Head no="03 · THE BOARD" title="Chalk talk" note="The short version of me, in chalk. Pick up a stick, leave your mark, and sign before you go." />
+            <Head no="03 · THE BOARD" title="Chalk talk" note="Leave your mark." />
             <Board />
           </div>
         </section>
 
         {/* Files */}
         <section id="experience" data-reveal className={`${container} scroll-mt-20 py-28`}>
-          <Head no="04 · THE FILES" title="The paper trail" note="Where I've worked and studied. Keep scrolling and each file opens itself." />
+          <Head no="04 · THE FILES" title="The paper trail" note="Signed, sealed, delivered." />
           <Files />
         </section>
 

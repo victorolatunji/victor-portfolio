@@ -294,7 +294,7 @@ export const site = {
 
   guestList: {
     heading: "Sign the guest list.",
-    text: "Passing through? Leave a note. It goes straight onto the rack for the next visitor to read.",
+    text: "Say a word on your way out.",
   },
 
   contact: {

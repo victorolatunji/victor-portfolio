@@ -266,12 +266,8 @@ export default function Closet() {
         </div>
       </div>
 
-      <p className="mt-4 text-sm text-ink/60">
-        {!open
-          ? `${site.rail.length} pieces and ${site.shoes.length} pairs inside.`
-          : arrange
-            ? "Drag the pieces into your own order. It's saved on this device."
-            : "Tap a piece to view it. Shoes on the shelf take you to my profiles."}
+      <p className="mt-4 min-h-5 text-sm text-ink/60">
+        {!open && `${site.rail.length} pieces and ${site.shoes.length} pairs inside.`}
       </p>
 
       {/* Viewing room */}

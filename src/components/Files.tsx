@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/data/site";
 
-// Experience as a packed stack of file folders. Each file pulls itself out
-// as it scrolls into view: no clicking needed, works the same on phones.
+// Experience as a packed stack of file folders. Each file pulls itself out as it
+// scrolls into view and tucks back in when you scroll up past it. No clicking needed.
 export default function Files() {
   const files = [
     ...site.experience.map((j) => ({
@@ -25,14 +25,16 @@ export default function Files() {
   const refs = useRef<(HTMLDivElement | null)[]>([]);
   const [shown, setShown] = useState<boolean[]>(() => files.map(() => false));
 
+  // Scrolling down opens each file as it comes into view; scrolling back up
+  // (so the file drops below the screen again) closes it.
   useEffect(() => {
     const io = new IntersectionObserver(
       (entries) =>
         entries.forEach((e) => {
-          if (!e.isIntersecting) return;
           const i = Number((e.target as HTMLElement).dataset.i);
-          setShown((s) => (s[i] ? s : s.map((v, k) => (k === i ? true : v))));
-          io.unobserve(e.target);
+          const belowScreen = e.boundingClientRect.top > (e.rootBounds?.bottom ?? window.innerHeight) * 0.5;
+          const open = e.isIntersecting || !belowScreen;
+          setShown((s) => (s[i] === open ? s : s.map((v, k) => (k === i ? open : v))));
         }),
       { rootMargin: "0px 0px -18% 0px", threshold: 0.35 },
     );

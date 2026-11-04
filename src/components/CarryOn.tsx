@@ -55,17 +55,7 @@ export default function CarryOn() {
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-4">
-        <p className="text-sm text-ink/60">
-          {open ? (
-            <>
-              <span className="md:hidden">Swipe through the pockets →</span>
-              <span className="hidden md:inline">Every skill, packed and worn. Hover a piece to pick it up.</span>
-            </>
-          ) : (
-            "Packed for the road. Unlatch to look inside."
-          )}
-        </p>
+      <div className="mt-4 flex min-h-10 items-center justify-end gap-4">
         {open && (
           <button type="button" onClick={() => setOpen(false)} className="chip">
             Close the case
