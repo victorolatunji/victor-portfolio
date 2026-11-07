@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Note = { id: string; name: string; message: string; created_at: string };
 
@@ -25,6 +25,12 @@ export default function GuestList() {
     kind: "idle",
   });
 
+  // Success messages fade away on their own.
+  const fade = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (fade.current) clearTimeout(fade.current);
+  }, []);
+
   useEffect(() => {
     fetch("/api/guestbook", { cache: "no-store" })
       .then((r) => r.json())
@@ -44,8 +50,11 @@ export default function GuestList() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Something went wrong.");
       if (data.note) setNotes((n) => [data.note, ...(n ?? [])]);
+      setName("");
       setMessage("");
-      setStatus({ kind: "ok", text: "You're on the list. Thanks!" });
+      setStatus({ kind: "ok", text: "Pinned to the rack. Thanks for stopping by." });
+      if (fade.current) clearTimeout(fade.current);
+      fade.current = setTimeout(() => setStatus({ kind: "idle" }), 3500);
       window.dispatchEvent(new Event("guestbook:signed"));
     } catch (err) {
       setStatus({ kind: "error", text: (err as Error).message });
@@ -78,7 +87,7 @@ export default function GuestList() {
             minLength={3}
             rows={4}
             className="field mt-1 resize-none"
-            placeholder="Say something about the site, the work, anything."
+            placeholder="Share something…"
           />
           <span className="mono mt-1 block text-right text-[0.65rem] text-ink/45">{message.length}/240</span>
         </label>
@@ -92,7 +101,7 @@ export default function GuestList() {
         {status.text && (
           <p
             role="status"
-            className={`mt-3 text-sm ${status.kind === "error" ? "text-accent" : "text-live-dark"}`}
+            className={`mt-3 text-sm ${status.kind === "error" ? "text-accent" : "text-live-dark msg-fade"}`}
           >
             {status.text}
           </p>

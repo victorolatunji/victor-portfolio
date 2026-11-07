@@ -15,6 +15,7 @@ export default function Board() {
   const ghost = useRef<HTMLDivElement>(null);
   const last = useRef<{ x: number; y: number } | null>(null);
   const idle = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fade = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tool, setTool] = useState<Tool>("none");
   const [wiping, setWiping] = useState(false);
   const [sigs, setSigs] = useState<Sig[]>([]);
@@ -202,7 +203,9 @@ export default function Board() {
           setSigs((s) => [data.signature, ...s]);
           setFresh(data.signature.id);
         }
-        setStatus({ kind: "ok", text: "Signed. You're on the board for good." });
+        setStatus({ kind: "ok", text: "Your mark is on the board. It's staying." });
+        if (fade.current) clearTimeout(fade.current);
+        fade.current = setTimeout(() => setStatus({ kind: "idle" }), 3500);
       });
     } catch (err) {
       setStatus({ kind: "error", text: (err as Error).message });
@@ -237,9 +240,10 @@ export default function Board() {
                   <p key={p}>{p}</p>
                 ))}
               </div>
-              <p className="chalk mt-6 inline-block text-2xl text-bone">
-                <span className="chalk-circle">&ldquo;{site.motto}&rdquo;</span>
-              </p>
+              <figure className="chalk mt-6 inline-block text-bone">
+                <blockquote className="chalk-circle text-2xl">&ldquo;{site.motto}&rdquo;</blockquote>
+                <figcaption className="quote-by mt-2 text-xl text-bone/70">{site.mottoBy}</figcaption>
+              </figure>
             </div>
             <div>
               <p className="chalk text-3xl">{site.now.heading}:</p>
@@ -342,7 +346,7 @@ export default function Board() {
           </svg>
         </button>
       </div>
-      <p role="status" className={`mt-3 min-h-5 text-sm ${status.kind === "error" ? "text-accent" : status.kind === "ok" ? "text-live-dark" : "text-ink/60"}`}>
+      <p role="status" className={`mt-3 min-h-5 text-sm ${status.kind === "error" ? "text-accent" : status.kind === "ok" ? "text-live-dark msg-fade" : "text-ink/60"}`}>
         {status.text}
       </p>
     </div>

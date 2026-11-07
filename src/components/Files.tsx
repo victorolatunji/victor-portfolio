@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { site } from "@/data/site";
 
 // Experience as a packed stack of file folders. Each file pulls itself out as it
-// scrolls into view and tucks back in when you scroll up past it. No clicking needed.
+// scrolls into view and tucks back in when you scroll up past it.
+// Smooth on phones: file heights never change (no layout shifts while scrolling);
+// only opacity and transform animate, and a buffer zone stops flicker at the edge.
 export default function Files() {
   const files = [
     ...site.experience.map((j) => ({
@@ -22,24 +24,39 @@ export default function Files() {
       dark: true,
     },
   ];
-  const refs = useRef<(HTMLDivElement | null)[]>([]);
+  const slots = useRef<(HTMLDivElement | null)[]>([]);
   const [shown, setShown] = useState<boolean[]>(() => files.map(() => false));
 
-  // Scrolling down opens each file as it comes into view; scrolling back up
-  // (so the file drops below the screen again) closes it.
   useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          const i = Number((e.target as HTMLElement).dataset.i);
-          const belowScreen = e.boundingClientRect.top > (e.rootBounds?.bottom ?? window.innerHeight) * 0.5;
-          const open = e.isIntersecting || !belowScreen;
-          setShown((s) => (s[i] === open ? s : s.map((v, k) => (k === i ? open : v))));
-        }),
-      { rootMargin: "0px 0px -18% 0px", threshold: 0.35 },
-    );
-    refs.current.forEach((el) => el && io.observe(el));
-    return () => io.disconnect();
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      const vh = window.innerHeight;
+      setShown((prev) => {
+        let changed = false;
+        const next = prev.map((open, i) => {
+          const el = slots.current[i];
+          if (!el) return open;
+          const top = el.getBoundingClientRect().top;
+          // open once the file is 78% up the screen; close only after it drops below 90%
+          const v = open ? top < vh * 0.9 : top < vh * 0.78;
+          if (v !== open) changed = true;
+          return v;
+        });
+        return changed ? next : prev;
+      });
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+    check();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   return (
@@ -48,22 +65,24 @@ export default function Files() {
         <div
           key={f.tab + f.title}
           ref={(el) => {
-            refs.current[i] = el;
+            slots.current[i] = el;
           }}
-          data-i={i}
-          className={`file ${f.dark ? "file-dark" : ""} ${shown[i] ? "is-open" : ""}`}
-          style={{ zIndex: i + 1, rotate: `${i % 2 ? 0.6 : -0.5}deg` }}
+          className="file-slot"
+          style={{ zIndex: i + 1 }}
         >
-          <span className="file-tab mono" style={{ marginLeft: `${(i * 17) % 62}%` }}>
-            {f.tab.toUpperCase()}
-          </span>
-          <div className="file-head">
-            <span className="mono text-[0.7rem] opacity-60">{f.dates.toUpperCase()}</span>
-            <span className="mt-1 block text-lg font-semibold leading-snug">{f.title}</span>
-          </div>
-          <div className="file-body">
-            <div>
-              <p className={f.dark ? "display pb-6 text-4xl" : "pb-6 leading-relaxed opacity-80"}>{f.body}</p>
+          <div
+            className={`file ${f.dark ? "file-dark" : ""} ${shown[i] ? "is-open" : ""}`}
+            style={{ "--tilt": `${i % 2 ? 1.4 : -1.2}deg` } as React.CSSProperties}
+          >
+            <span className="file-tab mono" style={{ marginLeft: `${(i * 17) % 62}%` }}>
+              {f.tab.toUpperCase()}
+            </span>
+            <div className="file-head">
+              <span className="mono text-[0.7rem] opacity-60">{f.dates.toUpperCase()}</span>
+              <span className="mt-1 block text-lg font-semibold leading-snug">{f.title}</span>
+            </div>
+            <div className="file-body">
+              <p className={f.dark ? "display text-4xl" : "leading-relaxed opacity-80"}>{f.body}</p>
             </div>
           </div>
         </div>

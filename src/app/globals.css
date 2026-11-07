@@ -656,24 +656,29 @@ body {
 }
 
 /* ---------- Files (experience) ---------- */
+/* Heights never change while scrolling: only transform + opacity animate (GPU, no jank). */
 .files {
   max-width: 820px;
 }
-.file {
+.file-slot {
   position: relative;
   margin-top: -14px;
+}
+.file-slot:first-child {
+  margin-top: 0;
+}
+.file {
+  position: relative;
   background: var(--color-paper);
   border: 1px solid rgba(14, 15, 17, 0.12);
   border-radius: 0 6px 6px 6px;
   box-shadow: 0 -6px 14px -10px rgba(14, 15, 17, 0.35);
-  transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 500ms, rotate 500ms;
-}
-.file:first-child {
-  margin-top: 0;
+  transform: translate3d(0, 10px, 0) rotate(var(--tilt, 0deg));
+  transition: transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 520ms;
+  will-change: transform;
 }
 .file.is-open {
-  rotate: 0deg !important;
-  transform: translateY(-4px);
+  transform: translate3d(0, -4px, 0) rotate(0deg);
   box-shadow: 0 18px 34px -20px rgba(14, 15, 17, 0.45);
 }
 .file-tab {
@@ -699,26 +704,18 @@ body {
   padding: 1rem 1.4rem 0.6rem;
 }
 .file-body {
-  display: grid;
-  grid-template-rows: 0fr;
-  padding: 0 1.4rem 2.1rem; /* room for the next file's tab */
-  transition: grid-template-rows 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-.file-body > div {
-  overflow: hidden;
+  padding: 0 1.4rem 2.6rem; /* room for the next file's tab */
   opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity 500ms 150ms, transform 500ms 150ms;
+  transform: translate3d(0, 8px, 0);
+  transition: opacity 420ms ease, transform 520ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .file.is-open .file-body {
-  grid-template-rows: 1fr;
-}
-.file.is-open .file-body > div {
   opacity: 1;
   transform: none;
+  transition-delay: 90ms;
 }
-.file:last-child .file-body {
-  padding-bottom: 0.4rem;
+.file-slot:last-child .file-body {
+  padding-bottom: 1.4rem;
 }
 .file-dark {
   background: var(--color-ink);
@@ -730,6 +727,16 @@ body {
 }
 .file-dark.is-open .file-tab {
   background: var(--color-live);
+}
+
+/* Success messages: fade in, linger, fade out */
+.msg-fade {
+  animation: msg 3.5s ease both;
+}
+@keyframes msg {
+  0% { opacity: 0; transform: translateY(4px); }
+  10%, 80% { opacity: 1; transform: none; }
+  100% { opacity: 0; }
 }
 
 /* ---------- Chalkboard ---------- */
@@ -857,6 +864,21 @@ body {
   border: 2px solid rgba(245, 246, 247, 0.6);
   border-radius: 48% 52% 46% 54% / 60% 44% 56% 40%;
   transform: rotate(-1.5deg);
+}
+/* Quote credit: on its own line, right-aligned under the quote, led by a chalk stroke (no dash character) */
+.quote-by {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-right: 0.6rem;
+}
+.quote-by::before {
+  content: "";
+  width: 1.4rem;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(245, 246, 247, 0.6);
 }
 .sig-zone {
   position: relative;
@@ -1092,9 +1114,6 @@ body {
     transform: none;
   }
   .file-body {
-    grid-template-rows: 1fr;
-  }
-  .file-body > div {
     opacity: 1;
     transform: none;
   }

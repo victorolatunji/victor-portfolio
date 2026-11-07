@@ -119,6 +119,18 @@ export const site = {
       // link: { label: "Play Keys Militia", href: "" }, TODO: add once there's a playable build
     },
     {
+      slug: "nokemono",
+      title: "NOKEMONO",
+      kind: "sweatpants",
+      color: "#8d939b",
+      type: "brand",
+      role: "Founder",
+      year: "2026",
+      summary:
+        "My streetwear label, rooted in Japanese outsider culture and code. Consider this a taste: Drop 1 is a three-piece polo capsule.",
+      link: { label: "Step into NOKEMONO", href: "https://nokemono.com" },
+    },
+    {
       slug: "lakeridge-db",
       title: "Lakeridge Hospital Database",
       kind: "jeans",
@@ -146,18 +158,6 @@ export const site = {
         "Personal shopping and sourcing service. Clients build a wishlist, connect with a shopper or stylist, and get pieces from designers, luxury brands and artists delivered.",
       stack: ["Next.js", "Sourcing platform"],
       // link: { label: "Visit CouldItBeThisSWAG", href: "" }, TODO: add once live
-    },
-    {
-      slug: "nokemono",
-      title: "NOKEMONO",
-      kind: "sweatpants",
-      color: "#8d939b",
-      type: "brand",
-      role: "Founder",
-      year: "2026",
-      summary:
-        "My streetwear label, rooted in Japanese outsider culture and code. Consider this a taste: Drop 1 is a three-piece polo capsule.",
-      link: { label: "Step into NOKEMONO", href: "https://nokemono.com" },
     },
     {
       slug: "your-commission",
@@ -237,6 +237,7 @@ export const site = {
     "Off the clock you'll find me on the soccer pitch, deep in a playlist, outdoors, or working on NOKEMONO, my streetwear label.",
   ],
   motto: "The underdog story is the realest story there is.",
+  mottoBy: "Snoop Dogg",
 
   // Written on the chalkboard: what's happening right now.
   now: {
@@ -300,7 +301,7 @@ export const site = {
   contact: {
     heading: "Request a private viewing.",
     text: "Have a piece in mind, or want a seat at the table? Commission an app, a website or a game, or join the VAO team and help build the next collection.",
-    options: ["Commission a piece", "Join the VAO team", "Just say hello"],
+    options: ["Commission a piece", "Join the VAO team", "Partner with VAO"],
   },
 
   footerLabel: {

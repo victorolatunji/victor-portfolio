@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { site, type Piece } from "@/data/site";
 import { PieceArt, ShoeArt } from "./Art";
 
-const KEY = "closet-order-v1";
+const KEY = "closet-order-v2"; // bumped so everyone sees the new default order
 const defaultOrder = site.rail.map((p) => p.slug);
 const bySlug = new Map(site.rail.map((p) => [p.slug, p]));
 
