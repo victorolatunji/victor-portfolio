@@ -1,12 +1,25 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { site } from "@/data/site";
 
-// The preview card shown when the link is shared on LinkedIn, iMessage, Discord, etc.
+// The preview card shown when the link is shared (WhatsApp, iMessage, LinkedIn, X, Discord…).
+// Simple and professional, in the site's own fonts: Instrument Serif + Inter (files in /assets/fonts).
+// Name and role come from site.ts.
 export const alt = `${site.fullName} | ${site.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+const INK = "#0e0f11";
+const BONE = "#f5f6f7";
+const GOLD = "#c9a24a";
+
+export default async function OpenGraphImage() {
+  const [serif, sans] = await Promise.all([
+    readFile(join(process.cwd(), "assets/fonts/InstrumentSerif-Regular.woff")),
+    readFile(join(process.cwd(), "assets/fonts/Inter-Medium.woff")),
+  ]);
+
   return new ImageResponse(
     (
       <div
@@ -14,25 +27,74 @@ export default function OpenGraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          background: "#e9ebee",
-          padding: 72,
+          padding: 36,
+          background: INK,
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ fontSize: 60, fontWeight: 800, color: "#000" }}>{site.brand}</div>
-          <div style={{ display: "flex", alignItems: "center", fontSize: 28, color: "#5b6068" }}>
-            <div style={{ width: 16, height: 16, borderRadius: 8, background: "#1f9d55", marginRight: 14 }} />
-            {site.role}
+        {/* fine gold frame */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "1.5px solid rgba(201,162,74,0.55)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              fontFamily: "Instrument Serif",
+              fontSize: 44,
+              letterSpacing: 16,
+              color: INK,
+              background: BONE,
+              padding: "10px 18px 6px 34px",
+            }}
+          >
+            {site.brand}
           </div>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 88, fontWeight: 800, color: "#000", lineHeight: 1 }}>{site.fullName}</div>
-          <div style={{ fontSize: 30, color: "#b3261e", marginTop: 24, maxWidth: 1000 }}>{site.hero.line}</div>
+
+          <div
+            style={{
+              display: "flex",
+              fontFamily: "Instrument Serif",
+              fontSize: 96,
+              lineHeight: 1,
+              color: BONE,
+              marginTop: 54,
+              letterSpacing: -1,
+            }}
+          >
+            {site.fullName}
+          </div>
+
+          <div style={{ display: "flex", width: 72, height: 1.5, background: GOLD, marginTop: 34 }} />
+
+          <div style={{ display: "flex", alignItems: "center", marginTop: 30 }}>
+            <div style={{ width: 10, height: 10, borderRadius: 5, background: "#1f9d55", marginRight: 16 }} />
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "Inter",
+                fontSize: 22,
+                letterSpacing: 7,
+                color: GOLD,
+              }}
+            >
+              {site.role.toUpperCase()}
+            </div>
+          </div>
         </div>
       </div>
     ),
-    size,
+    {
+      ...size,
+      fonts: [
+        { name: "Instrument Serif", data: serif, style: "normal", weight: 400 },
+        { name: "Inter", data: sans, style: "normal", weight: 500 },
+      ],
+    },
   );
 }
