@@ -277,7 +277,7 @@ export const site = {
     {
       role: "Freelance Full-Stack Developer",
       company: "Self-employed",
-      dates: "", // TODO: add start date, e.g. "Jan 2026 → Present"
+      dates: "Dec 2025 → Present",
       summary:
         "Design, build and deploy full-stack client websites end to end, from mockup to launch. Clients include M&S Hosting Solutions.",
     },
