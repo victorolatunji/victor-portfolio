@@ -59,6 +59,7 @@ export type Job = { role: string; company: string; dates: string; summary: strin
 
 export const site = {
   brand: "VAO",
+  labs: "VAO Labs", // the tech arm of VAO
   fullName: "Victor Ayodeji Olatunji",
   shortName: "Victor Olatunji",
   role: "Full-stack developer",
@@ -89,15 +90,16 @@ export const site = {
       kind: "coat",
       color: "#111214",
       type: "project",
-      role: "Freelance full-stack developer",
+      role: "Freelance full-stack developer, sole developer",
       year: "2026",
       summary:
-        "Live marketing site for a GTA short-term rental company, designed around their real properties and brand.",
+        "Marketing and contact-to-book site for a short-term rental company running 11 Airbnb properties across 7 GTA cities.",
       points: [
-        "Took the project from homepage mockup with the client's real property data through build and deployment.",
-        "Integrated Supabase for data and Resend for email, deployed on Vercel.",
+        "Search by city and guest count, 11 property pages with galleries, and 7 city landing pages.",
+        "Four inquiry forms validated with Zod and saved to Supabase, with Resend email alerts and Tawk.to live chat.",
+        "Mobile-first and CASL-compliant. I took it from design to deployment on my own.",
       ],
-      stack: ["Next.js", "Supabase", "Tailwind", "Resend", "Vercel"],
+      stack: ["Next.js", "TypeScript", "Tailwind", "Supabase", "Resend", "Cloudinary", "Vercel"],
       link: { label: "Visit the live site", href: "https://mshostingsolutions.ca/" },
     },
     {
@@ -106,17 +108,18 @@ export const site = {
       kind: "hoodie",
       color: "#b3261e",
       type: "project",
-      role: "Founder and game developer, VAO",
+      role: "Solo developer, VAO Labs",
       year: "2026",
-      status: "In production",
       summary:
-        "VAO's first original game: a fast, multiplayer-style web shooter where you fight by typing.",
+        "A 2D jetpack typing-shooter where typing is the only way to shoot. Built solo on a $0 budget and free to play in the browser.",
       points: [
-        "Built on the ideas behind my Keyboard Warriors capstone, rebuilt for the browser.",
-        "Designed to run cheaply in any browser, no install needed.",
+        "10 hand-built maps, 5 modes, 40+ weapons, and AI enemies that fly, take cover and throw grenades.",
+        "A 16-character lobby, an in-game comic, voiced training and saved progress.",
+        "Every bug logged with its cause and fix, and Playwright tests that play the game in a real browser.",
+        "Next up: online multiplayer.",
       ],
-      stack: ["Phaser", "TypeScript"],
-      // link: { label: "Play Keys Militia", href: "" }, TODO: add once there's a playable build
+      stack: ["Phaser 3", "JavaScript", "Vite", "Arcade Physics", "Playwright"],
+      link: { label: "Visit the live site to play", href: "https://victorolatunji.itch.io/keys-militia" },
     },
     {
       slug: "nokemono",
@@ -243,11 +246,11 @@ export const site = {
   now: {
     heading: "Right now",
     items: [
-      "Building Keys Militia, VAO's first game",
+      "Keys Militia is live: VAO Labs' first game",
       "Counting down to graduation",
       "Prepping NOKEMONO's first drop",
       "Assembling the CouldItBeThisSWAG team",
-      "Hiring through VAO: contract roles open",
+      "Hiring at VAO Labs: contract roles open",
     ],
   },
   facts: [
@@ -300,8 +303,8 @@ export const site = {
 
   contact: {
     heading: "Request a private viewing.",
-    text: "Have a piece in mind, or want a seat at the table? Commission an app, a website or a game, or join the VAO team and help build the next collection.",
-    options: ["Commission a piece", "Join the VAO team", "Partner with VAO"],
+    text: "Have a piece in mind, or want a seat at the table? Commission an app, a website or a game, or join VAO Labs and help build the next collection.",
+    options: ["Commission a piece", "Join VAO Labs", "Partner with VAO"],
   },
 
   footerLabel: {

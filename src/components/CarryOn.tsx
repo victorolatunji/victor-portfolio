@@ -46,7 +46,7 @@ export default function CarryOn() {
           <span className="case-handle" />
           <span className="case-latch case-latch-l" />
           <span className="case-latch case-latch-r" />
-          <span className="case-plate mono">VAO · CARRY-ON · {total} PIECES</span>
+          <span className="case-plate mono">{site.labs.toUpperCase()} · CARRY-ON · {total} PIECES</span>
           {!open && (
             <button type="button" onClick={() => setOpen(true)} className="unlatch mono">
               Unlatch the case

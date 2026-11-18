@@ -136,7 +136,7 @@ export default function Home() {
       <footer className="bg-ink pb-8 text-bone/55">
         <div className={`${container} flex flex-wrap items-center justify-between gap-3 border-t border-bone/10 pt-6 text-xs`}>
           <p>
-            © {new Date().getFullYear()} {site.brand} · {site.fullName}
+            © {new Date().getFullYear()} {site.fullName} · {site.labs}, a {site.brand} company
           </p>
           <a href={site.footerLabel.href} target="_blank" rel="noreferrer" className="mono hover:text-gold">
             {site.footerLabel.text.toUpperCase()}: {site.footerLabel.name} ↗
