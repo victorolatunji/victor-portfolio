@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { site } from "@/data/site";
 
 // The preview card shown when the link is shared (WhatsApp, iMessage, LinkedIn, X, Discord…).
-// Simple and professional, in the site's own fonts: Instrument Serif + Inter (files in /assets/fonts).
+// Simple and professional: the VAO logo (public/vao-logo-white.png) plus the site's fonts.
 // Name and role come from site.ts.
 export const alt = `${site.fullName} | ${site.role}`;
 export const size = { width: 1200, height: 630 };
@@ -15,10 +15,12 @@ const BONE = "#f5f6f7";
 const GOLD = "#c9a24a";
 
 export default async function OpenGraphImage() {
-  const [serif, sans] = await Promise.all([
+  const [serif, sans, logoPng] = await Promise.all([
     readFile(join(process.cwd(), "assets/fonts/InstrumentSerif-Regular.woff")),
     readFile(join(process.cwd(), "assets/fonts/Inter-Medium.woff")),
+    readFile(join(process.cwd(), "public/vao-logo-white.png")),
   ]);
+  const logo = `data:image/png;base64,${logoPng.toString("base64")}`;
 
   return new ImageResponse(
     (
@@ -42,19 +44,7 @@ export default async function OpenGraphImage() {
             border: "1.5px solid rgba(201,162,74,0.55)",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "Instrument Serif",
-              fontSize: 44,
-              letterSpacing: 16,
-              color: INK,
-              background: BONE,
-              padding: "10px 18px 6px 34px",
-            }}
-          >
-            {site.brand}
-          </div>
+          <img src={logo} width={230} height={98} alt={site.brand} />
 
           <div
             style={{

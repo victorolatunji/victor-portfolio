@@ -1,9 +1,14 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
+// Browser tab icon: the VAO logo on a white tile.
 export const size = { width: 64, height: 64 };
 export const contentType = "image/png";
 
-export default function Icon() {
+export default async function Icon() {
+  const png = await readFile(join(process.cwd(), "public/vao-logo.png"));
+  const logo = `data:image/png;base64,${png.toString("base64")}`;
   return new ImageResponse(
     (
       <div
@@ -13,13 +18,11 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0e0f11",
-          color: "#f5f6f7",
-          fontSize: 44,
-          fontWeight: 800,
+          background: "#ffffff",
+          borderRadius: 12,
         }}
       >
-        V<span style={{ color: "#c9a24a" }}>.</span>
+        <img src={logo} width={58} height={25} alt="VAO" />
       </div>
     ),
     size,

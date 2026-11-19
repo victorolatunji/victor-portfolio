@@ -1,3 +1,4 @@
+import Image from "next/image";
 import CarryOn from "@/components/CarryOn";
 import Closet from "@/components/Closet";
 import GuestList from "@/components/GuestList";
@@ -30,7 +31,7 @@ export default function Home() {
         <ScrollFx />
         <div className={`${container} flex items-center justify-between gap-6`}>
           <a href="#top" className="flex items-center gap-3" aria-label={`${site.brand}, back to top`}>
-            <span className="woven">{site.brand}</span>
+            <Image src="/vao-logo.png" alt={site.brand} width={802} height={341} priority className="h-7 w-auto sm:h-8" />
             <span className="mono hidden text-xs text-ink/60 sm:inline">{site.shortName.toUpperCase()}</span>
           </a>
           <div className="flex items-center gap-5">
